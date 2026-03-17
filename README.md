@@ -36,13 +36,120 @@ between vulnerable and non-vulnerable code**.
 
 ------------------------------------------------------------------------
 
-# 🧠 Core Features
+# 🧪 Key Contributions
 
--   🔍 **Hard Negative Mining Pipeline**
--   🧩 **Improved LineVul-based model architecture**
--   ⚙️ **Flexible training and evaluation workflows**
--   📊 **Reproducible experiments with fixed seeds**
--   📂 **External dataset management**
+### 📦 VulGate Dataset
+- A large-scale, high-quality dataset containing **236,663 function-level samples across 792 projects**
+- Covers **180 CWE types**
+- Includes data updated through **May 2025**
+
+### 🧠 Hard Negative Mining
+- Incorporates **hard negative samples** (code pairs with >90% semantic similarity but different labels)
+- Forces the model to learn **deep semantic patterns instead of superficial syntax**
+
+### ⚖️ Data Quality & Balance
+- Rigorous cleaning to remove **duplicates and label noise**
+- Maintains a **balanced distribution** of vulnerable and secure samples
+
+### 📏 Context Window Optimization
+- Extending context window to **1024 tokens** significantly improves:
+  - Long-range dependency capture
+  - Performance on complex code structures
+
+---
+
+# 📊 Benchmark Performance
+
+### 🚀 Breakthrough in Generalization
+- Prior work shows **40–70% performance drop** on unseen projects
+- Gen-Vulgate reduces degradation to only **4–6%**
+
+### 🏆 State-of-the-Art Results
+- Fine-tuned **UniXcoder-Base-Nine** achieves:
+  - **F1 Score: 94.73%**
+- Evaluated on the **BigVul benchmark**
+- Outperforms existing LLM-based approaches
+
+### 🛡 Robustness
+- Verified through:
+  - **Multi-seed experiments**
+  - **Ablation studies**
+- Performance gains are **stable and data-driven**
+
+------------------------------------------------------------------------
+
+# 📦 Dataset Comparison (Table 1)
+
+| Dataset | Size | Balanced | CWEs | Hard Neg.% | Quality |
+|--------|------|----------|------|------------|--------|
+| Devign* | 25,872 | ✓ | – | 86.41% | ★★★★ |
+| BigVul | 188,636 | ✗ | 91 | 19.45% | ★★★ |
+| ReVeal* | 22,734 | ✗ | – | 36.13% | ★★★ |
+| D2A* | 1.30M | ✗ | – | 6.21% | ★★ |
+| CVEfixes | 168,089 | ✗ | 180 | 9.36% | ★★★★ |
+| DiverseVul* | 348,987 | ✗ | 150 | 25.22% | ★★★ |
+| MegaVul | 353,873 | ✗ | 169 | 0.00% | ★★★★ |
+| **VulGate (Ours)** | **236,663** | **✓** | **180** | **~60.95%** | **★★★★★** |
+
+
+# 🏆 BigVul Benchmark Results (Table 3)
+
+| Category | Model | Context | F1 | P | R |
+|----------|------|--------|----|----|----|
+| Static | Cppcheck | – | 12 | 10 | 15 |
+| Static | Infer | – | 19.5 | 15 | 28 |
+| ML | SySeVR | – | 27 | 15 | 74 |
+| ML | IVDetect | – | 35 | 23 | 72 |
+| Decoder | CodeGPT-2 | 1024 | 90.45 | 97 | 84.45 |
+| Decoder | CodeLlama | 1024 | 79.73 | 79.34 | 80.13 |
+| Encoder | CodeBERT | 512 | 91 | 97 | 86 |
+| Encoder | UniXcoder-Base | 1024 | 94.23 | 97.28 | 91.37 |
+| **Encoder** | **UniXcoder-Base-Nine** | **1024** | **94.73** | **96.74** | **92.8** |
+
+
+# 📊 VulGate Dataset Results (Table 5)
+
+| Model | F1 | P | R |
+|------|----|----|----|
+| Cppcheck | 29.0 | 54.0 | 20.0 |
+| Infer | 42.0 | 26.0 | 98.0 |
+| CodeBERT | 85.9 | 83.2 | 89.0 |
+| UniXcoder-Base | 87.0 | 85.4 | 88.7 |
+| **UniXcoder-Base-Nine** | **88.9** | **87.7** | **90.0** |
+
+
+# 🌍 Generalization Results (Table 6)
+
+| Dataset | Model | F1 | P | R |
+|--------|------|----|----|----|
+| Linux | CodeBERT | 75.3 | 69.5 | 82.1 |
+| Linux | UniXcoder-Base-Nine | 76.4 | 93.7 | 64.1 |
+| PrimeVul | CodeBERT | 87.0 | 87.0 | 87.0 |
+| PrimeVul | UniXcoder-Base-Nine | 89.14 | 87.1 | 91.3 |
+| Claude | CodeBERT | 17.25 | 53.1 | 10.3 |
+| Claude | UniXcoder-Base-Nine | 64.8 | 92.0 | 50.0 |
+
+
+# 🧪 Ablation Studies
+
+### 🔻 Without Hard Negatives
+| Dataset | F1 |
+|--------|----|
+| VulGate (In-distribution) | 98.87 |
+| Linux (Unseen) | 33.62 |
+| Claude (Unseen) | 41.48 |
+
+➡️ High train performance, **catastrophic generalization failure**
+
+### ⚖️ Impact of Dataset Balance
+
+| Ratio (V:S) | F1 |
+|------------|----|
+| 90:10 | 76.67 |
+| 80:20 | 83.73 |
+| 70:30 | 86.35 |
+| **50:50** | **88.90** |
+
 
 ------------------------------------------------------------------------
 
@@ -140,17 +247,6 @@ python linevul_main.py --seed 42 --do_test
 
 ------------------------------------------------------------------------
 
-# 📊 Research Objectives
-
-The project aims to:
-
--   Improve **cross-project vulnerability detection**
--   Reduce **false positives**
--   Improve **model generalization**
--   Enable **reproducible security research**
-
-------------------------------------------------------------------------
-
 # 🔗 Dataset Access
 
 The dataset used in this research is hosted externally.
@@ -195,13 +291,4 @@ Example:
 
 # 📜 License
 
-This project follows the licensing terms of the original LineVul
-repository unless otherwise specified.
-
-------------------------------------------------------------------------
-
-# 🤝 Contributing
-
-Contributions, issues, and research discussions are welcome.
-
-Please open an issue or pull request for improvements.
+## MIT
