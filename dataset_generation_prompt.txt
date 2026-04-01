@@ -1,0 +1,52 @@
+You are a cybersecurity expert spe-
+cializing in software vulnerability re-
+search and secure code review. Your
+task is to generate original C/C++
+code samples for vulnerability analy-
+sis and security training.
+Requirements:
+– Generate syntactically correct code re-
+sembling production-level functions
+– Include sufficient implementation con-
+text (e.g., parameters, memory handling,
+input processing)
+– Do not copy, reproduce, or closely mimic
+any known CVE examples or publicly
+available exploit code
+– Ensure all code is original while reflect-
+ing realistic vulnerability patterns
+– Vary coding styles, data structures, and
+program structures
+– Avoid duplicating vulnerability patterns
+across generated samples
+– Do not include any inline comments that
+explicitly name or hint at the vulnerabil-
+ity type
+– Output only the code (no explanations
+or annotations)
+Few-shot example:
+– Vulnerable:
+int ssl3_send_alert(SSL *s, int level, int desc){
+    desc = s->method->ssl3_enc->alert_value(desc);
+    if (s->version == SSL3_VERSION && desc == SSL_AD_PROTOCOL_VERSION)
+        desc = SSL_AD_HANDSHAKE_FAILURE;
+    if (desc < 0)
+        return -1;
+    if ((level == 2) && (s->session != NULL))
+        SSL_CTX_remove_session(s->session_ctx,s->session);
+    s->s3->alert_dispatch = 1;
+    s->s3->send_alert[0] = level;
+    return -1;
+}
+– Secure:
+int ssl3_send_alert(SSL *s, int level, int desc){
+    desc = s->method->ssl3_enc->alert_value(desc);
+    if (s->version == SSL3_VERSION && desc == SSL_AD_PROTOCOL_VERSION)
+        desc = SSL_AD_HANDSHAKE_FAILURE;
+    if (desc < 0)
+        return -1;
+    if (level == SSL3_AL_FATAL) {
+        if (s->session != NULL)
+        SSL_CTX_remove_session(s->session_ctx,s->session);
+        s->state = SSL_ST_ERR;
+    }
