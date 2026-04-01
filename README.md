@@ -249,7 +249,9 @@ python linevul_main.py --seed 42 --do_test
 
 # 🔗 Dataset Access
 
-The dataset used in this research is hosted externally.
+The datasets used in this research are hosted externally.
+
+## VulGate Dataset
 
 Google Drive:
 
@@ -258,6 +260,21 @@ https://drive.google.com/drive/folders/1j2AdOJxUCEKpeIkJFgTCfViE6j5nWq_u?usp=dri
 After downloading, place the dataset in the project directory:
 
     dataset/
+
+## Vulgate+ Dataset
+
+Google Drive:
+
+https://drive.google.com/drive/folders/1PzwJFh7DEQKdOmzYwguoMwCdSGItD00m
+
+------------------------------------------------------------------------
+
+# 🎯 Best Checkpoint
+
+The best-performing model checkpoint is available here:
+https://drive.google.com/drive/folders/1KgafbWQcVVx6h9_Bt-01usg971pZ1c52
+
+Includes: codebert & unixcoder-base-nine
 
 ------------------------------------------------------------------------
 
